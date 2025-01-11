@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loteria Random</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            margin: 20px auto;
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .options {
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .mega {
+            background-color: #4caf50;
+        }
+
+        .quina {
+            background-color: #007bff;
+        }
+
+        .lotofacil {
+            background-color: #800080;
+        }
+
+        .zerar {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .result {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+
+        .history {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .history p {
+            margin: 5px 0;
+        }
+
+        .ball {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            margin: 5px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            animation: bounce 0.5s;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sorteios de Loteria</h1>
+        <div class="options">
+            <button class="mega" onclick="sortear('megaSena')">Mega-Sena (6 de 60)</button>
+            <button class="mega" onclick="sortear('megaSena7')">Mega-Sena (7 de 60)</button>
+            <button class="quina" onclick="sortear('quina')">Quina (5 de 80)</button>
+            <button class="quina" onclick="sortear('quina7')">Quina (7 de 80)</button>
+            <button class="lotofacil" onclick="sortear('lotofacil')">Lotofácil (15 de 25)</button>
+            <button class="lotofacil" onclick="sortear('lotofacil16')">Lotofácil (16 de 25)</button>
+            <button class="zerar" onclick="zerarHistorico()">Zerar Histórico</button>
+        </div>
+        <div class="result" id="result">Escolha um jogo para sortear os números!</div>
+        <div class="history" id="history">
+            <h3>Histórico de Resultados:</h3>
+        </div>
+    </div>
+
+    <script>
+        function sortear(jogo) {
+            const resultDiv = document.getElementById('result');
+            const historyDiv = document.getElementById('history');
+            let numeros = [];
+
+            switch (jogo) {
+                case 'megaSena':
+                    numeros = gerarNumeros(6, 60);
+                    break;
+                case 'megaSena7':
+                    numeros = gerarNumeros(7, 60);
+                    break;
+                case 'quina':
+                    numeros = gerarNumeros(5, 80);
+                    break;
+                case 'quina7':
+                    numeros = gerarNumeros(7, 80);
+                    break;
+                case 'lotofacil':
+                    numeros = gerarNumeros(15, 25);
+                    break;
+                case 'lotofacil16':
+                    numeros = gerarNumeros(16, 25);
+                    break;
+                default:
+                    return;
+            }
+
+            resultDiv.innerHTML = '';
+            numeros.forEach(numero => {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                ball.textContent = numero;
+                resultDiv.appendChild(ball);
+            });
+
+            const historyItem = document.createElement('p');
+            historyItem.textContent = `${jogo.toUpperCase()}: ${numeros.join(', ')}`;
+            historyDiv.appendChild(historyItem);
+        }
+
+        function gerarNumeros(quantidade, maximo) {
+            const numeros = new Set();
+            while (numeros.size < quantidade) {
+                const numero = Math.floor(Math.random() * maximo) + 1;
+                numeros.add(numero);
+            }
+            return Array.from(numeros).sort((a, b) => a - b);
+        }
+
+        function zerarHistorico() {
+            const historyDiv = document.getElementById('history');
+            historyDiv.innerHTML = '<h3>Histórico de Resultados:</h3>';
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Escolha um jogo para sortear os números!';
+        }
+    </script>
+</body>
+</html>
